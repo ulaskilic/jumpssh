@@ -1,4 +1,4 @@
-# JumpSSH
+# JumpSSH [Work in progress]
 ## Description
 SSH Session storage manager for easy jumps.
 ## Installation
