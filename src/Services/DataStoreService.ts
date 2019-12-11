@@ -1,5 +1,5 @@
 import {Connection, ConnectionOptions, createConnection, Like, Repository} from "typeorm";
-import {Sessions} from "./Entity/Sessions";
+import {Session} from "./Entity/Session";
 import path from 'path';
 
 /**
@@ -19,7 +19,7 @@ export class DataStoreService {
             DataStoreService.connection = await createConnection({
                 type: "sqlite",
                 database: `${path.resolve(__dirname, "../../data")}/data.sqlite`,
-                entities: [Sessions],
+                entities: [Session],
                 synchronize: true,
                 //logging: true
             })
@@ -32,33 +32,33 @@ export class DataStoreService {
      *
      * @param name
      */
-    public async listSessions(name: string): Promise<Sessions[]> {
+    public async listSessions(name: string): Promise<Session[]> {
         const connection: Connection = await DataStoreService.getConnection();
-        const repository = await connection.getRepository(Sessions);
+        const repository = await connection.getRepository(Session);
         return repository.find({name: Like(`%${name}%`)});
     }
 
-    public async getSession(name: string): Promise<Sessions[]> {
+    public async getSession(name: string): Promise<Session[]> {
         const connection: Connection = await DataStoreService.getConnection();
-        const repository = await connection.getRepository(Sessions);
+        const repository = await connection.getRepository(Session);
         return repository.find({name: name});
     }
 
-    public async createSession(session:Sessions): Promise<Sessions> {
+    public async createSession(session:Session): Promise<Session> {
         const connection: Connection = await DataStoreService.getConnection();
-        const repository = await connection.getRepository(Sessions);
+        const repository = await connection.getRepository(Session);
         return repository.save(session);
     }
 
-    public async updateSession(session: Sessions): Promise<Sessions> {
+    public async updateSession(session: Session): Promise<Session> {
         const connection: Connection = await DataStoreService.getConnection();
-        const repository = await connection.getRepository(Sessions);
+        const repository = await connection.getRepository(Session);
         return repository.save(session);
     }
 
-    public async deleteSession(session: Sessions): Promise<any> {
+    public async deleteSession(session: Session): Promise<any> {
         const connection: Connection = await DataStoreService.getConnection();
-        const repository = await connection.getRepository(Sessions);
+        const repository = await connection.getRepository(Session);
         return repository.remove(session);
     }
 }

@@ -6,9 +6,9 @@ import clear from 'clear';
 import figlet from 'figlet';
 import {DataStoreService} from "./Services/DataStoreService";
 import prompt, {Choice} from 'prompts';
-import {Sessions} from "./Services/Entity/Sessions";
+import {Session} from "./Services/Entity/Session";
 import validator from 'validator';
-
+import {spawn, execSync} from 'child_process';
 
 /**
  * Main application context
@@ -17,18 +17,24 @@ export class Application {
     program: any;
     store: DataStoreService | null = null;
 
+    /**
+     * Constructor
+     */
     constructor() {
         this.initArgs();
     }
 
+    /**
+     * Startup of CLI
+     */
     public async execute() {
         this.store = new DataStoreService();
         if (program.create) {
             this.createSession()
         } else if (program.update) {
-            this.updateSession()
+            this.updateSession(program.update)
         } else if (program.delete) {
-            this.deleteSession()
+            this.deleteSession(program.delete)
         } else if (program.args.length > 0) {
             this.findSession()
         } else {
@@ -38,6 +44,9 @@ export class Application {
         }
     }
 
+    /**
+     * Create SSH Session and save to DB
+     */
     private async createSession() {
         const response = await prompt([
             {
@@ -75,7 +84,7 @@ export class Application {
                 }
             },
             {
-                type: 'text',
+                type: 'password',
                 name: 'pass',
                 message: 'Pass information (Optional)',
                 initial: '',
@@ -85,7 +94,7 @@ export class Application {
             },
         ]);
 
-        const session = new Sessions(response.sessionName, response.ipAddress, response.user, response.pass);
+        const session = new Session(response.sessionName, response.ipAddress, response.user, response.pass);
         try {
             if (!this.store) {
                 throw new Error("Unknown error occured");
@@ -97,16 +106,26 @@ export class Application {
         }
     }
 
-    private async updateSession() {
+    /**
+     * Update exists session
+     *
+     * @param name
+     */
+    private async updateSession(name: string) {
 
     }
 
-    private async deleteSession() {
+    /**
+     * Delete session
+     *
+     * @param name
+     */
+    private async deleteSession(name: string) {
 
     }
 
     private async findSession() {
-        let _sessions: Sessions[] = [];
+        let _sessions: Session[] = [];
         try {
             if (!this.store) {
                 throw new Error("Unknown error occurred");
@@ -121,22 +140,11 @@ export class Application {
             this.log("Failed! Error: " + e.message, Colors.RED);
         }
 
-        const optionList = (): Choice[] => {
-            const choices: Choice[] = [];
-            for (let session of _sessions) {
-                choices.push({
-                    title: `${session.name}(${session.ip})`,
-                    value: session
-                })
-            }
-            return choices;
-        };
-
         const response = await prompt({
             type: 'select',
             name: 'session',
             message: 'Pick session',
-            choices: optionList()
+            choices: this.prepareChoices(_sessions)
         });
         if (response.session) {
             this.startSession(response.session);
@@ -146,8 +154,9 @@ export class Application {
 
     }
 
-    private async startSession(session: Sessions) {
+    private async startSession(session: Session) {
         this.log(`Trying to connect : ${session.name}(${session.ip})`, Colors.GREEN);
+        spawn('ssh', ['-T',`${session.user ? session.user + '@' : null}${session.ip}`])
     }
 
     private initArgs() {
@@ -170,6 +179,17 @@ export class Application {
                 console.log(chalk.red(msg));
                 break
         }
+    }
+
+    private prepareChoices(sessions:Session[]): Choice[] {
+        const choices: Choice[] = [];
+        for (let session of sessions) {
+            choices.push({
+                title: `${session.name}(${session.ip})`,
+                value: session
+            })
+        }
+        return choices;
     }
 
 }

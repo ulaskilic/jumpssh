@@ -1,4 +1,4 @@
-import { Sessions } from "./Entity/Sessions";
+import { Session } from "./Entity/Session";
 /**
  * Data store service
  */
@@ -16,9 +16,9 @@ export declare class DataStoreService {
      *
      * @param name
      */
-    listSessions(name: string): Promise<Sessions[]>;
-    getSession(name: string): Promise<Sessions[]>;
-    createSession(session: Sessions): Promise<Sessions>;
-    updateSession(session: Sessions): Promise<Sessions>;
-    deleteSession(session: Sessions): Promise<any>;
+    listSessions(name: string): Promise<Session[]>;
+    getSession(name: string): Promise<Session[]>;
+    createSession(session: Session): Promise<Session>;
+    updateSession(session: Session): Promise<Session>;
+    deleteSession(session: Session): Promise<any>;
 }
