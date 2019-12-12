@@ -39,6 +39,7 @@
     "path": "^0.12.7",
     "prompts": "^2.3.0",
     "reflect-metadata": "^0.1.13",
+    "sqlite": "^3.0.3",
     "typeorm": "^0.2.21",
     "validator": "^12.1.0"
   }
