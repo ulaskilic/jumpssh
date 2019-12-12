@@ -279,6 +279,7 @@ export class Application {
     private initArgs() {
         this.program = program
             .version(appJson.version)
+            .name(appJson.name)
             .option("-c, --create", "create new session")
             // [TODO] implement update functionality
             // .option("-u, --update <SESSION_NAME>", "update exists session")
