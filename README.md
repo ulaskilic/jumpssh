@@ -1,8 +1,10 @@
 # JumpSSH
-## Description
+[![NPM Version](http://img.shields.io/npm/v/jumpssh.svg?style=flat)](https://www.npmjs.org/package/commander)
+[![NPM Downloads](https://img.shields.io/npm/dm/jumpssh.svg?style=flat)](https://npmcharts.com/compare/commander?minimal=true)
+
 SSH Session storage manager for easy jumps.
 
-![ALT](./.github/splash.png)
+![JumpSSH](https://github.com/ulaskilic/jumpssh/raw/master/.github/splash.png)
 ## Installation
 ```bash
 npm i -g jumpssh
