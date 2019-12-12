@@ -32,9 +32,9 @@ export class Application {
         this.store = new DataStoreService();
         if (program.create) {
             this.createSession();
-        // [TODO] implement update functionality
-        // } else if (program.update) {
-        //     this.updateSession(program.update);
+            // [TODO] implement update functionality
+            // } else if (program.update) {
+            //     this.updateSession(program.update);
         } else if (program.delete) {
             this.deleteSession(program.delete);
         } else if (program.args.length > 0) {
@@ -60,7 +60,7 @@ export class Application {
                     if (!sessionName) {
                         return false;
                     }
-                    return sessionName;
+                    return true;
                 },
             },
             {
@@ -93,9 +93,15 @@ export class Application {
             //         return true;
             //     },
             // },
-        ]);
+        ], {
+            onCancel: () => {
+                this.log(`Error : Missing data provided`, Colors.RED);
+                process.exit();
+            },
+        });
 
         const session = new Session(response.sessionName, response.ipAddress, response.user, "");
+
         try {
             if (!this.store) {
                 throw new Error("Unknown error occured");
@@ -141,12 +147,17 @@ export class Application {
             name: "session",
             message: "Pick session for remove",
             choices: this.prepareChoices(sessions),
+        }, {
+            onCancel: () => {
+                this.log(`There aren't selected any session`, Colors.RED);
+                process.exit();
+            },
         });
         if (response.session) {
             await this.store.deleteSession(response.session);
             this.log("Session deleted!", Colors.GREEN);
         } else {
-            this.log("Process terminated!", Colors.RED);
+            this.log("There aren't any selected session", Colors.RED);
             process.exit();
         }
     }
@@ -181,11 +192,16 @@ export class Application {
                     }));
                 });
             },
+        }, {
+            onCancel: () => {
+                this.log(`There aren't any selected session`, Colors.RED);
+                process.exit();
+            },
         });
         if (response.session) {
             this.startSession(response.session);
         } else {
-            this.log("Process terminated!", Colors.RED);
+            this.log("There aren't any selected session", Colors.RED);
             process.exit();
         }
     }
@@ -236,12 +252,12 @@ export class Application {
             const sshSession = spawn(`ssh`, [`-qtt`, `${session.user ? session.user + "@" : ""}${session.ip}`],
                 {stdio: "inherit", shell: true});
 
+            sshSession.on("close", (code) => {
+                this.log("Session closed. Code : " + code, Colors.RED);
+                this.log("Thanks for using!", Colors.GREEN);
+            });
             sshSession.on("error", (e) => {
                 this.log(e.message, Colors.RED);
-            });
-
-            sshSession.on("exit", () => {
-                this.log("Session ended, thanks for using!", Colors.GREEN);
             });
         } catch (e) {
             this.log(e.message, Colors.RED);
