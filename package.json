@@ -1,6 +1,6 @@
 {
   "name": "jumpssh",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SSH session storage for making easy jumps",
   "main": "./lib/index.js",
   "scripts": {
