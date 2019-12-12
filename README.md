@@ -1,6 +1,6 @@
 # JumpSSH
-[![NPM Version](http://img.shields.io/npm/v/jumpssh.svg?style=flat)](https://www.npmjs.org/package/commander)
-[![NPM Downloads](https://img.shields.io/npm/dm/jumpssh.svg?style=flat)](https://npmcharts.com/compare/commander?minimal=true)
+[![NPM Version](http://img.shields.io/npm/v/jumpssh.svg?style=flat)](https://www.npmjs.org/package/jumpssh)
+[![NPM Downloads](https://img.shields.io/npm/dm/jumpssh.svg?style=flat)](https://npmcharts.com/compare/jumpssh?minimal=true)
 
 SSH Session storage manager for easy jumps.
 
