@@ -13,13 +13,14 @@
   "bin": {
     "jumpssh": "./lib/index.js"
   },
-  "author": "",
+  "author": "ulash.klc@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@types/clear": "^0.1.0",
     "@types/figlet": "^1.2.0",
     "@types/node": "^12.12.17",
     "@types/prompts": "^2.0.3",
+    "@types/ssh2": "^0.5.39",
     "@types/validator": "^12.0.1",
     "nodemon": "^2.0.2",
     "rimraf": "^3.0.0",
